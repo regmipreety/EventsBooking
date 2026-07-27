@@ -1,4 +1,5 @@
-﻿@{
+﻿@model WebApplication1.Models.HomeViewModel
+@{
     ViewData["Title"] = "TickEvent";
 }
 
@@ -116,48 +117,25 @@
             <h2>Featured this month</h2>
         </div>
         <div class="vendor-grid">
-            <div class="vendor-card">
-                <div class="vendor-img">
-                    <div class="verified-badge"><svg viewBox="0 0 24 24" fill="none" stroke="#12291F" stroke-width="3"><polyline points="20 6 9 17 4 12"></polyline></svg>Verified</div>
-                    <span class="vendor-cat">Venue</span>
-                </div>
-                <div class="vendor-body">
-                    <h3>The Willowmere Estate</h3>
-                    <div class="vendor-meta">Berkshire · up to 180 guests</div>
-                    <div class="vendor-foot">
-                        <div class="vendor-rating"><svg viewBox="0 0 24 24"><polygon points="12 2 15 9 22 9.5 17 14.5 18.5 22 12 18 5.5 22 7 14.5 2 9.5 9 9"></polygon></svg>4.9 (86)</div>
-                        <div class="vendor-price">from £3,200</div>
+            @foreach (var vendor in Model.Vendors)
+            {
+                <div class="vendor-card">
+                    <div class="vendor-img">
+                        <div class="verified-badge"><svg viewBox="0 0 24 24" fill="none" stroke="#12291F" stroke-width="3"><polyline points="20 6 9 17 4 12"></polyline></svg>Verified</div>
+                        <span class="vendor-cat">@vendor.Category</span>
+                    </div>
+                    <div class="vendor-body">
+                        <h3>@vendor.FullName</h3>
+                        <div class="vendor-meta">@vendor.Location · @vendor.Description</div>
+                        <div class="vendor-meta">@vendor.EmailAddress · @vendor.PhoneNumber</div>
+                        <div class="vendor-meta">Available from @vendor.Availability?.ToString("dd MMM yyyy")</div>
+                        <div class="vendor-foot">
+                            <div class="vendor-rating"><svg viewBox="0 0 24 24"><polygon points="12 2 15 9 22 9.5 17 14.5 18.5 22 12 18 5.5 22 7 14.5 2 9.5 9 9"></polygon></svg>@vendor.Rating.ToString("0.0")</div>
+                            <div class="vendor-price">from £@vendor.Price.ToString("N0")</div>
+                        </div>
                     </div>
                 </div>
-            </div>
-            <div class="vendor-card">
-                <div class="vendor-img">
-                    <div class="verified-badge"><svg viewBox="0 0 24 24" fill="none" stroke="#12291F" stroke-width="3"><polyline points="20 6 9 17 4 12"></polyline></svg>Verified</div>
-                    <span class="vendor-cat">Photographer</span>
-                </div>
-                <div class="vendor-body">
-                    <h3>Maren Cole Photography</h3>
-                    <div class="vendor-meta">London · full-day coverage</div>
-                    <div class="vendor-foot">
-                        <div class="vendor-rating"><svg viewBox="0 0 24 24"><polygon points="12 2 15 9 22 9.5 17 14.5 18.5 22 12 18 5.5 22 7 14.5 2 9.5 9 9"></polygon></svg>5.0 (142)</div>
-                        <div class="vendor-price">from £850</div>
-                    </div>
-                </div>
-            </div>
-            <div class="vendor-card">
-                <div class="vendor-img">
-                    <div class="verified-badge"><svg viewBox="0 0 24 24" fill="none" stroke="#12291F" stroke-width="3"><polyline points="20 6 9 17 4 12"></polyline></svg>Verified</div>
-                    <span class="vendor-cat">Makeup artist</span>
-                </div>
-                <div class="vendor-body">
-                    <h3>Studio Amara</h3>
-                    <div class="vendor-meta">Manchester · bridal & events</div>
-                    <div class="vendor-foot">
-                        <div class="vendor-rating"><svg viewBox="0 0 24 24"><polygon points="12 2 15 9 22 9.5 17 14.5 18.5 22 12 18 5.5 22 7 14.5 2 9.5 9 9"></polygon></svg>4.8 (63)</div>
-                        <div class="vendor-price">from £180</div>
-                    </div>
-                </div>
-            </div>
+            }
         </div>
     </div>
 </section>
@@ -169,7 +147,7 @@
                 <h2>Run an event business? Get discovered.</h2>
                 <p>Join thousands of vendors getting booked through TickEvent. List free, set your own availability and pricing, get paid securely.</p>
             </div>
-            <a href="#" class="btn-gold">List your business</a>
+            <a asp-action="Admin" class="btn-gold">List your business</a>
         </div>
     </div>
 </section>

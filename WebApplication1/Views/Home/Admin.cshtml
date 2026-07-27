@@ -1,0 +1,117 @@
+@model WebApplication1.Models.AdminViewModel
+@{
+    ViewData["Title"] = "Admin panel";
+}
+
+<section class="section">
+    <div class="wrap">
+        <div class="section-head">
+            <div class="kicker">Vendor admin</div>
+            <h2>Add a vendor profile</h2>
+            <p>Use this form to publish a new vendor. The information will appear on the public homepage immediately.</p>
+        </div>
+
+        @if (TempData["Message"] is string message)
+        {
+            <div class="alert-success">@message</div>
+        }
+
+        <div class="admin-grid">
+            <form asp-action="Admin" method="post" class="admin-form" enctype="multipart/form-data">
+                <div asp-validation-summary="ModelOnly" class="text-danger"></div>
+
+                <div class="form-row">
+                    <label asp-for="Vendor.FirstName"></label>
+                    <input asp-for="Vendor.FirstName" class="form-control" />
+                    <span asp-validation-for="Vendor.FirstName" class="text-danger"></span>
+                </div>
+
+                <div class="form-row">
+                    <label asp-for="Vendor.LastName"></label>
+                    <input asp-for="Vendor.LastName" class="form-control" />
+                    <span asp-validation-for="Vendor.LastName" class="text-danger"></span>
+                </div>
+
+                <div class="form-row">
+                    <label asp-for="Vendor.EmailAddress"></label>
+                    <input asp-for="Vendor.EmailAddress" class="form-control" />
+                    <span asp-validation-for="Vendor.EmailAddress" class="text-danger"></span>
+                </div>
+
+                <div class="form-row">
+                    <label asp-for="Vendor.PhoneNumber"></label>
+                    <input asp-for="Vendor.PhoneNumber" class="form-control" />
+                    <span asp-validation-for="Vendor.PhoneNumber" class="text-danger"></span>
+                </div>
+
+                <div class="form-row">
+                    <label asp-for="Vendor.Category"></label>
+                    <input asp-for="Vendor.Category" class="form-control" />
+                    <span asp-validation-for="Vendor.Category" class="text-danger"></span>
+                </div>
+
+                <div class="form-row">
+                    <label asp-for="Vendor.Location"></label>
+                    <input asp-for="Vendor.Location" class="form-control" />
+                    <span asp-validation-for="Vendor.Location" class="text-danger"></span>
+                </div>
+
+                <div class="form-row">
+                    <label asp-for="Vendor.Description"></label>
+                    <textarea asp-for="Vendor.Description" class="form-control" rows="3"></textarea>
+                    <span asp-validation-for="Vendor.Description" class="text-danger"></span>
+                </div>
+
+                <div class="form-row">
+                    <label asp-for="Vendor.Price"></label>
+                    <input asp-for="Vendor.Price" class="form-control" />
+                    <span asp-validation-for="Vendor.Price" class="text-danger"></span>
+                </div>
+
+                <div class="form-row">
+                    <label asp-for="Vendor.Availability"></label>
+                    <input asp-for="Vendor.Availability" class="form-control" type="date" />
+                    <span asp-validation-for="Vendor.Availability" class="text-danger"></span>
+                </div>
+
+                <div class="form-row">
+                    <label asp-for="Vendor.BrowseImage"></label>
+                    <input asp-for="Vendor.BrowseImage" class="form-control" type="file" />
+                    <span asp-validation-for="Vendor.BrowseImage" class="text-danger"></span>
+                </div>
+
+                <div class="form-row">
+                    <label asp-for="Vendor.Rating"></label>
+                    <input asp-for="Vendor.Rating" class="form-control" />
+                    <span asp-validation-for="Vendor.Rating" class="text-danger"></span>
+                </div>
+
+                <div class="form-row checkbox-row">
+                    <label>
+                        <input asp-for="Vendor.IsVerified" />
+                        <span>@Html.DisplayNameFor(m => m.Vendor.IsVerified)</span>
+                    </label>
+                </div>
+
+                <button type="submit" class="btn-gold">Save vendor</button>
+            </form>
+
+            <div class="admin-list">
+                <h3>Current vendors</h3>
+                @foreach (var vendor in Model.Vendors)
+                {
+                    <div class="admin-item">
+                        <strong>@vendor.FullName</strong>
+                        <p>@vendor.Category · @vendor.Location</p>
+                        <p><small>@vendor.EmailAddress · @vendor.PhoneNumber</small></p>
+                        <small>@vendor.Description</small>
+                        @if (!string.IsNullOrWhiteSpace(vendor.ImagePath))
+                        {
+                            <img src="@vendor.ImagePath" alt="@vendor.FullName" style="max-width:100%; border-radius:8px; margin-top:0.5rem;" />
+                        }
+                    </div>
+                }
+            </div>
+        </div>
+    </div>
+</section>
