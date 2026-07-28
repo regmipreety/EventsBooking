@@ -2,7 +2,7 @@ using System.ComponentModel.DataAnnotations;
 using System.ComponentModel.DataAnnotations.Schema;
 using Microsoft.AspNetCore.Http;
 
-namespace WebApplication1.Models;
+namespace WebApplication1.Models.Entities;
 
 public class VendorProfile
 {
@@ -43,7 +43,6 @@ public class VendorProfile
     [Display(Name = "Price")]
     public decimal Price { get; set; }
 
-    [Required(ErrorMessage = "Availability is required")]
     [DataType(DataType.Date)]
     [Display(Name = "Availability")]
     public DateTime? Availability { get; set; }

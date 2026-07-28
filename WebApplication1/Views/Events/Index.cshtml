@@ -1,0 +1,41 @@
+@model List<WebApplication1.Models.Entities.Event>
+    <h1>Upcoming Events</h1>
+
+    @if(!Model.Any())
+    {
+        <p>No upcoming events.</p>
+    }
+    else
+    {
+        <table>
+            <thead>
+                <tr>
+                    <th>Event</th>
+                    <th>Description</th>
+                    <th>Date</th>
+                    <th>Price</th>
+                </tr>
+            </thead>
+            <tbody>
+                @foreach (var evt in Model)
+                {
+                    <tr>
+                        <td>
+                            <h2>@evt.Name</h2>
+                            <p>@evt.Description</p>
+                            <p>@evt.StartDate</p>
+                            <p>@evt.Price</p>
+                        </td>
+                    </tr>
+                }
+            </tbody>
+        </table>
+    }
+
+
+
+
+
+
+
+
