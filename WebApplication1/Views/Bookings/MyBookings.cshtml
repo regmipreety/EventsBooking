@@ -1,0 +1,50 @@
+@model List<WebApplication1.Models.Entities.Booking>
+
+
+@if (TempData["BookingSuccess"] != null)
+{
+    <div class="alert alert-success">@TempData["BookingSuccess"]</div>
+}
+@if (TempData["BookingError"] != null)
+{
+    <div class="alert alert-danger">@TempData["BookingError"]</div>
+}
+
+<h1>My Bookings</h1>
+
+@if (!Model.Any())
+{
+    <p>You haven't booked any events yet.</p>
+}
+else
+{
+    <table class="table">
+        <thead>
+            <tr>
+                <th>Event</th>
+                <th>Date</th>
+                <th>Status</th>
+                <th></th>
+            </tr>
+        </thead>
+        <tbody>
+            @foreach (var booking in Model)
+            {
+                <tr>
+                    <td>@booking.Event?.Name</td>
+                    <td>@booking.Event?.StartDate.ToString("MMM dd, yyyy h:mm tt")</td>
+                    <td>@booking.Status</td>
+                    <td>
+                        @if (booking.Status == WebApplication1.Models.Enums.BookingStatus.Confirmed)
+                        {
+                            <form asp-controller="Bookings" asp-action="Cancel" method="post">
+                                <input type="hidden" name="bookingId" value="@booking.Id" />
+                                <button type="submit" class="btn btn-outline-danger btn-sm">Cancel</button>
+                            </form>
+                        }
+                    </td>
+                </tr>
+            }
+        </tbody>
+    </table>
+}

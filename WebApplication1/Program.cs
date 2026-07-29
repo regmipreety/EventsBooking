@@ -13,6 +13,9 @@ builder.Services.AddDbContext<ApplicationDbContext>(options =>
     options.UseSqlite(builder.Configuration.GetConnectionString("DefaultConnection")));
 
 builder.Services.AddScoped<IBookingRule, CapacityRule>();
+builder.Services.AddScoped<IBookingRule, NoDuplicateBookingRule>();
+builder.Services.AddScoped<IBookingRule, EventNotInPastRule>();
+builder.Services.AddScoped<IBookingService, BookingService>();
 builder.Services.AddScoped<IBookingRepository, BookingRepository>();
 builder.Services.AddScoped<IEventRepository, EventRepository>();
 builder.Services.AddControllersWithViews();

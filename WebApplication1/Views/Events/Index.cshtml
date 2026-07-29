@@ -1,41 +1,48 @@
 @model List<WebApplication1.Models.Entities.Event>
-    <h1>Upcoming Events</h1>
 
-    @if(!Model.Any())
-    {
-        <p>No upcoming events.</p>
-    }
-    else
-    {
-        <table>
-            <thead>
+@if (TempData["BookingSuccess"] != null)
+{
+    <div class="alert alert-success">@TempData["BookingSuccess"]</div>
+}
+@if (TempData["BookingError"] != null)
+{
+    <div class="alert alert-danger">@TempData["BookingError"]</div>
+}
+
+<h1>Upcoming Events</h1>
+
+@if (!Model.Any())
+{
+    <p>No events available yet.</p>
+}
+else
+{
+    <table class="table">
+        <thead>
+            <tr>
+                <th>Title</th>
+                <th>Date</th>
+                <th>Location</th>
+                <th>Capacity</th>
+                <th></th>
+            </tr>
+        </thead>
+        <tbody>
+            @foreach (var evt in Model)
+            {
                 <tr>
-                    <th>Event</th>
-                    <th>Description</th>
-                    <th>Date</th>
-                    <th>Price</th>
+                    <td>@evt.Name</td>
+                    <td>@evt.StartDate.ToString("MMM dd, yyyy h:mm tt")</td>
+                    <td>@evt.Location</td>
+                    <td>@evt.Capacity</td>
+                    <td>
+                        <form asp-controller="Bookings" asp-action="Book" method="post">
+                            <input type="hidden" name="eventId" value="@evt.Id" />
+                            <button type="submit" class="btn btn-primary btn-sm">Book</button>
+                        </form>
+                    </td>
                 </tr>
-            </thead>
-            <tbody>
-                @foreach (var evt in Model)
-                {
-                    <tr>
-                        <td>
-                            <h2>@evt.Name</h2>
-                            <p>@evt.Description</p>
-                            <p>@evt.StartDate</p>
-                            <p>@evt.Price</p>
-                        </td>
-                    </tr>
-                }
-            </tbody>
-        </table>
-    }
-
-
-
-
-
-
-
-
+            }
+        </tbody>
+    </table>
+}

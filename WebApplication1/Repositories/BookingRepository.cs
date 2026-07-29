@@ -12,13 +12,26 @@ public class BookingRepository : IBookingRepository
     {
         _context = context;
     }
+    public async Task<List<Booking>> GetAllBookingsAsync()
+    {
+        return await _context.Bookings.ToListAsync();
+    }
+    public async Task<Booking?> GetByIdAsync(int id)
+        => await _context.Bookings.Include(b=>b.Event).FirstOrDefaultAsync(b=>b.Id==id);
+    
+    public async Task<List<Booking>> GetBookingsByEventIdAsync(int eventId)
+    {
+        return await _context.Bookings
+            .Where(b => b.EventId == eventId)
+            .ToListAsync();
+    }  
 
     public async Task<List<Booking>> GetBookingsByUserIdAsync(string userId)
     {
         return await _context.Bookings
             .Where(b => b.UserId == userId)
             .ToListAsync();
-    }
+    } 
 
     public async Task<Booking?> GetBookingByIdAsync(int bookingId)
     {
@@ -46,4 +59,10 @@ public class BookingRepository : IBookingRepository
             await _context.SaveChangesAsync();
         }
     }
+
+    public async Task SaveChangesAsync()
+    {
+        await _context.SaveChangesAsync();
+    }
+
 }
