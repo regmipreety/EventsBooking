@@ -15,12 +15,18 @@ public class EventRepository : IEventRepository
 
     public async Task<List<Event>> GetAllEventsAsync()
     {
-        return await _context.Events.ToListAsync();
+        return await _context.Events
+        .Include(e => e.Vendor)
+        .OrderBy(e => e.StartDate)
+        .ToListAsync();
     }
 
     public async Task<Event?> GetEventByIdAsync(int eventId)
     {
-        return await _context.Events.FindAsync(eventId);
+        return await _context.Events
+        .Include(e => e.Vendor)
+        .Include(e => e.Bookings)
+        .FirstOrDefaultAsync(e => e.Id == eventId);
     }
 
     public async Task AddEventAsync(Event evt)

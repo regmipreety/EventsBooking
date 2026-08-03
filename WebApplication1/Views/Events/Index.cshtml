@@ -23,6 +23,7 @@ else
                 <th>Title</th>
                 <th>Date</th>
                 <th>Location</th>
+                <th>Description</th>
                 <th>Capacity</th>
                 <th></th>
             </tr>
@@ -34,9 +35,10 @@ else
                     <td>@evt.Name</td>
                     <td>@evt.StartDate.ToString("MMM dd, yyyy h:mm tt")</td>
                     <td>@evt.Location</td>
+                    <td>@evt.Description</td>
                     <td>@evt.Capacity</td>
                     <td>
-                        <form asp-controller="Bookings" asp-action="Book" method="post">
+                        <form asp-controller="Booking" asp-action="BookEvent" method="post">
                             <input type="hidden" name="eventId" value="@evt.Id" />
                             <button type="submit" class="btn btn-primary btn-sm">Book</button>
                         </form>

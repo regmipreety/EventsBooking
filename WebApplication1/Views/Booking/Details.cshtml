@@ -1,0 +1,97 @@
+@model WebApplication1.Models.Entities.Booking
+
+<div class="container py-5">
+    <div class="row align-items-start mb-5">
+        <div class="col-lg-8">
+            <p class="text-uppercase text-muted mb-2 small">Booking details</p>
+            <h1 class="mb-3">@Model.Event?.Name</h1>
+            <p class="text-muted fs-5">@(!string.IsNullOrWhiteSpace(Model.Event?.Description) ? Model.Event.Description : "A premium event experience with every detail handled for you.")</p>
+        </div>
+        <div class="col-lg-4">
+            <div class="card details-card shadow-sm border-0">
+                <div class="card-body">
+                    <h2 class="h5 mb-4">Booking summary</h2>
+                    <dl class="row mb-0">
+                        <dt class="col-5 text-muted">Event</dt>
+                        <dd class="col-7">@Model.Event?.Name</dd>
+
+                        <dt class="col-5 text-muted">Event Description</dt>
+                        <dd class="col-7">@Model.Event?.Description</dd>
+
+                        <dt class="col-5 text-muted">User</dt>
+                        <dd class="col-7">@Model.UserId</dd>
+
+                        <dt class="col-5 text-muted">Booked at</dt>
+                        <dd class="col-7">@Model.BookingDate.ToString("MMM dd, yyyy h:mm tt")</dd>
+
+                        <dt class="col-5 text-muted">Status</dt>
+                        <dd class="col-7">@Model.Status</dd>
+
+                        <dt class="col-5 text-muted">Location</dt>
+                        <dd class="col-7">@Model.Event?.Location</dd>
+
+                        <dt class="col-5 text-muted">Price</dt>
+                        <dd class="col-7">@(Model.Event != null ? Model.Event.Price.ToString("C") : "N/A")</dd>
+                    </dl>
+
+                    <div class="mt-4">
+                        <a asp-action="Index" class="btn btn-secondary w-100">Back to list</a>
+                    </div>
+                </div>
+            </div>
+        </div>
+    </div>
+
+    <div class="row gx-4 gy-4">
+        <div class="col-lg-6">
+            <section class="details-section p-4 rounded-4 shadow-sm bg-white">
+                <h2 class="mb-3">About service</h2>
+                <p class="text-muted">@(!string.IsNullOrWhiteSpace(Model.Event?.Vendor?.Description) ? Model.Event.Vendor.Description : "Enjoy a carefully designed event experience, delivered by an expert vendor with a reputation for professionalism and attention to detail.")</p>
+                @if (Model.Event?.Vendor != null)
+                {
+                    <div class="mt-3">
+                        <p class="mb-1"><strong>Vendor</strong></p>
+                        <p class="mb-0">@Model.Event.Vendor.FullName</p>
+                        <p class="text-muted mb-0">@Model.Event.Vendor.Category</p>
+                    </div>
+                }
+            </section>
+        </div>
+
+        <div class="col-lg-6">
+            <section class="details-section p-4 rounded-4 shadow-sm bg-white">
+                <h2 class="mb-3">Menu</h2>
+                <p class="text-muted mb-3">Menu included:</p>
+                <ul class="details-list mb-0">
+                    <li>Full event setup and styling</li>
+                    <li>Guest welcome and check-in support</li>
+                    <li>Refreshments and catering services</li>
+                    <li>Disposable tableware and service ware</li>
+                </ul>
+            </section>
+        </div>
+
+        <div class="col-lg-6">
+            <section class="details-section p-4 rounded-4 shadow-sm bg-white">
+                <h2 class="mb-3">How pricing works</h2>
+                <p class="text-muted mb-3"><strong>What you pay for</strong></p>
+                <ul class="details-list mb-0">
+                    <li>Service price includes venue coordination and event delivery.</li>
+                    <li>Costs are shared evenly across all confirmed guests.</li>
+                    <li>Pricing reflects a complete package, including staff and setup.</li>
+                </ul>
+            </section>
+        </div>
+
+        <div class="col-lg-6">
+            <section class="details-section p-4 rounded-4 shadow-sm bg-white">
+                <h2 class="mb-3">Service standards</h2>
+                <ul class="details-list mb-0">
+                    <li>The supplier will deliver and set up the event space.</li>
+                    <li>The supplier will provide all necessary tableware and service items.</li>
+                    <li>Staff will be available for guest support throughout the booking.</li>
+                </ul>
+            </section>
+        </div>
+    </div>
+</div>

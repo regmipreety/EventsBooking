@@ -29,3 +29,45 @@ body {
 .form-floating > .form-control-plaintext:focus::placeholder, .form-floating > .form-control:focus::placeholder {
   text-align: start;
 }
+
+.details-card {
+  border: 1px solid #dee2e6;
+}
+
+.details-card .card-body {
+  padding: 2rem;
+}
+
+.details-section {
+  min-height: 100%;
+}
+
+.details-list {
+  list-style: none;
+  padding-left: 0;
+}
+
+.details-list li {
+  position: relative;
+  padding-left: 1.5rem;
+  margin-bottom: 0.85rem;
+  color: #4d4d4d;
+}
+
+.details-list li::before {
+  content: "";
+  position: absolute;
+  left: 0;
+  top: 0.6rem;
+  width: 8px;
+  height: 8px;
+  border-radius: 50%;
+  background: #258cfb;
+}
+
+@media (max-width: 767.98px) {
+  .details-card,
+  .details-section {
+    border-radius: 1rem;
+  }
+}

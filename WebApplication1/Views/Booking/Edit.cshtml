@@ -1,0 +1,23 @@
+@model WebApplication1.Models.Entities.Booking
+
+<h1>Edit Booking Status</h1>
+
+<form asp-action="Edit" method="post">
+    <input type="hidden" name="id" value="@Model.Id" />
+
+    <p><strong>Event:</strong> @Model.Event?.Name</p>
+    <p><strong>User:</strong> @Model.UserId</p>
+
+    <div class="mb-3">
+        <label class="form-label">Status</label>
+        <select name="status" class="form-select">
+            @foreach (var value in Enum.GetValues<WebApplication1.Models.Enums.BookingStatus>())
+            {
+                <option value="@value" selected="@(value == Model.Status)">@value</option>
+            }
+        </select>
+    </div>
+
+    <button type="submit" class="btn btn-primary">Save</button>
+    <a asp-action="Index" class="btn btn-secondary">Cancel</a>
+</form>

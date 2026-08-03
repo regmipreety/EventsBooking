@@ -1,17 +1,42 @@
 using Microsoft.AspNetCore.Mvc;
 using WebApplication1.Services.Interfaces;
+using WebApplication1.Models.Enums;
 namespace WebApplication1.Controllers;
 
 public class BookingController : Controller
 {
    private readonly IBookingService _bookingService;
-   
+   private readonly IBookingRepository _bookingRepository;
+
    private const string TempUserId= "temp-user-1";
 
-   public BookingController(IBookingService bookingService)
+   public BookingController(IBookingService bookingService, IBookingRepository bookingRepository)
    {
        _bookingService = bookingService;
+       _bookingRepository = bookingRepository;
    }
+
+public async Task<IActionResult> Index()
+    {
+        var bookings = await _bookingRepository.GetAllBookingsAsync();
+        return View(bookings);
+    }
+
+    public async Task<IActionResult> MyBookings()
+    {
+        var bookings = await _bookingRepository.GetBookingsByUserIdAsync(TempUserId);
+        return View(bookings);
+    }
+
+    public async Task<IActionResult> Details(int id)
+    {
+        var booking = await _bookingRepository.GetByIdAsync(id);
+        if (booking == null)
+        {
+            return NotFound();
+        }
+        return View(booking);
+    }
 
    [HttpPost]
    public async Task<IActionResult> BookEvent(int eventId)
@@ -26,7 +51,7 @@ public class BookingController : Controller
        TempData["BookingSuccess"] = "Booking successful!";
        return RedirectToAction("Index", "Events");
    }
-       
+         
    [HttpPost]
     public async Task<IActionResult> CancelBooking(int bookingId)
     {
@@ -35,10 +60,32 @@ public class BookingController : Controller
         return RedirectToAction("MyBookings");
     }
 
-    public async Task<IActionResult> MyBookings([FromServices] IBookingRepository bookingRepository)
+    [HttpGet]
+    public async Task<IActionResult> Edit(int id)
     {
-        var bookings = await bookingRepository.GetBookingsByUserIdAsync(TempUserId);
-        return View(bookings);
+        var booking = await _bookingRepository.GetByIdAsync(id);
+        if (booking == null)
+        {
+            return NotFound();
+        }
+        return View(booking);
+    }
+
+    [HttpPost]
+    public async Task<IActionResult> Edit(int id, BookingStatus status)
+    {
+        var booking = await _bookingRepository.GetByIdAsync(id);
+        if (booking == null)
+        {
+            return NotFound();
+        }
+
+        booking.Status = status;
+        await _bookingRepository.UpdateBookingAsync(booking);
+        await _bookingRepository.SaveChangesAsync();
+
+        TempData["BookingSuccess"] = "Booking updated successfully!";
+        return RedirectToAction("MyBookings");
     }
 
 }
