@@ -1,8 +1,9 @@
+@using Microsoft.AspNetCore.Mvc.Rendering;
 @model WebApplication1.Models.Entities.Event
 
 <h1>Add a new Event</h1>
 
-<form asp-action="Create" method="post" enctype="multipart/form-data">
+<form asp-controller="Events" asp-action="Create" method="post" enctype="multipart/form-data">
     <div asp-validation-summary="ModelOnly" class="text-danger"></div>
 
     <div class="mb-3">
@@ -37,7 +38,10 @@
 
     <div class="mb-3">
         <label asp-for="VendorId" class="form-label"></label>
-        <input asp-for="VendorId" class="form-control" />
+        <select asp-for="VendorId" class="form-select" asp-items="(IEnumerable<SelectListItem>)ViewBag.Vendors">
+            <option value="">-- Select Vendor --</option>
+          
+        </select>
         <span asp-validation-for="VendorId" class="text-danger"></span>
     </div>
 

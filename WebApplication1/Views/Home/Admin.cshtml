@@ -62,23 +62,9 @@
                     <span asp-validation-for="Vendor.Description" class="text-danger"></span>
                 </div>
 
-                <div class="form-row">
-                    <label asp-for="Vendor.Price"></label>
-                    <input asp-for="Vendor.Price" class="form-control" />
-                    <span asp-validation-for="Vendor.Price" class="text-danger"></span>
-                </div>
+               
 
-                <div class="form-row">
-                    <label asp-for="Vendor.Availability"></label>
-                    <input asp-for="Vendor.Availability" class="form-control" type="date" />
-                    <span asp-validation-for="Vendor.Availability" class="text-danger"></span>
-                </div>
 
-                <div class="form-row">
-                    <label asp-for="Vendor.BrowseImage"></label>
-                    <input asp-for="Vendor.BrowseImage" class="form-control" type="file" />
-                    <span asp-validation-for="Vendor.BrowseImage" class="text-danger"></span>
-                </div>
 
                 <div class="form-row">
                     <label asp-for="Vendor.Rating"></label>
@@ -105,10 +91,7 @@
                         <p>@vendor.Category · @vendor.Location</p>
                         <p><small>@vendor.EmailAddress · @vendor.PhoneNumber</small></p>
                         <small>@vendor.Description</small>
-                        @if (!string.IsNullOrWhiteSpace(vendor.ImagePath))
-                        {
-                            <img src="@vendor.ImagePath" alt="@vendor.FullName" style="max-width:100%; border-radius:8px; margin-top:0.5rem;" />
-                        }
+                       
                     </div>
                 }
             </div>

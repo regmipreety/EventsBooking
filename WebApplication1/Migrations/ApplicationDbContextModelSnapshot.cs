@@ -116,9 +116,6 @@ namespace WebApplication1.Migrations
                         .ValueGeneratedOnAdd()
                         .HasColumnType("INTEGER");
 
-                    b.Property<DateTime?>("Availability")
-                        .HasColumnType("TEXT");
-
                     b.Property<string>("Category")
                         .IsRequired()
                         .HasColumnType("TEXT");
@@ -135,10 +132,6 @@ namespace WebApplication1.Migrations
                         .IsRequired()
                         .HasColumnType("TEXT");
 
-                    b.Property<string>("ImagePath")
-                        .IsRequired()
-                        .HasColumnType("TEXT");
-
                     b.Property<bool>("IsVerified")
                         .HasColumnType("INTEGER");
 
@@ -152,9 +145,6 @@ namespace WebApplication1.Migrations
 
                     b.Property<string>("PhoneNumber")
                         .IsRequired()
-                        .HasColumnType("TEXT");
-
-                    b.Property<decimal>("Price")
                         .HasColumnType("TEXT");
 
                     b.Property<decimal>("Rating")

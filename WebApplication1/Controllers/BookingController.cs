@@ -7,13 +7,15 @@ public class BookingController : Controller
 {
    private readonly IBookingService _bookingService;
    private readonly IBookingRepository _bookingRepository;
+   private readonly ILogger<BookingController> _logger;
 
    private const string TempUserId= "temp-user-1";
 
-   public BookingController(IBookingService bookingService, IBookingRepository bookingRepository)
+   public BookingController(IBookingService bookingService, IBookingRepository bookingRepository, ILogger<BookingController> logger)
    {
        _bookingService = bookingService;
        _bookingRepository = bookingRepository;
+       _logger = logger;
    }
 
 public async Task<IActionResult> Index()
@@ -42,12 +44,13 @@ public async Task<IActionResult> Index()
    public async Task<IActionResult> BookEvent(int eventId)
    {
        var result = await _bookingService.BookEventAsync(eventId, TempUserId);
-       if (result.IsSuccess)
+       if (!result.IsSuccess)
        {
+           _logger.LogWarning("Failed to book event with ID {EventId} by user {UserId}: {ErrorMessage}", eventId, TempUserId, result.ErrorMessage);
            TempData["BookingError"] = result.ErrorMessage;
            return RedirectToAction("Index", "Events");
        }
-
+        _logger.LogInformation("Successfully booked event with ID {EventId} by user {UserId}", eventId, TempUserId);
        TempData["BookingSuccess"] = "Booking successful!";
        return RedirectToAction("Index", "Events");
    }
@@ -56,8 +59,13 @@ public async Task<IActionResult> Index()
     public async Task<IActionResult> CancelBooking(int bookingId)
     {
         var result = await _bookingService.CancelBookingAsync(bookingId, TempUserId);
-        TempData[result.IsSuccess ? "BookingSuccess" : "BookingError"] =result.IsSuccess? "Booking cancelled successfully!" : result.ErrorMessage;
-        return RedirectToAction("MyBookings");
+        if(!result.IsSuccess)
+        {
+            _logger.LogWarning("Failed to cancel booking with ID {BookingId} by user {UserId}: {ErrorMessage}", bookingId, TempUserId, result.ErrorMessage);
+           
+        }   
+         TempData["BookingError"] = result.ErrorMessage;
+            return RedirectToAction("MyBookings");
     }
 
     [HttpGet]

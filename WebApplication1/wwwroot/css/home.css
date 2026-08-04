@@ -78,19 +78,110 @@ header .wrap {
     height: 14px;
 }
 
-nav {
+/* Keep Bootstrap navbar layout natural and only override theme colors */
+
+.navbar {
+    background: transparent !important;
+    padding: 0;
+}
+
+.navbar .container-fluid {
+    padding: 0;
+}
+
+.navbar-nav {
     display: flex;
-    gap: 34px;
-    font-size: 14.5px;
+    align-items: center;
+    gap: 1rem;
 }
 
-nav a {
-    opacity: 0.85;
-    transition: opacity 0.15s;
+.navbar-nav .nav-item {
+    display: flex;
+    align-items: center;
 }
 
-nav a:hover {
-    opacity: 1;
+.navbar .nav-link {
+    color: var(--cream);
+    font-size: 0.95rem;
+    padding: 0.45rem 0.75rem;
+}
+
+.navbar .nav-link:hover,
+.navbar .nav-link:focus,
+.navbar .nav-link.active {
+    color: var(--gold-100);
+}
+
+.navbar .dropdown {
+    position: relative;
+}
+
+.navbar .dropdown-menu {
+    position: absolute;
+    top: 100%;
+    left: 0;
+    z-index: 1000;
+    display: none;
+    background: rgba(18, 41, 31, 0.96);
+    border: 1px solid rgba(255, 255, 255, 0.08);
+    margin-top: 0.25rem;
+    min-width: 10rem;
+}
+
+.dropdown:hover > .dropdown-menu,
+.dropdown:focus-within > .dropdown-menu {
+    display: block;
+}
+
+.navbar .dropdown-item {
+    color: var(--cream);
+}
+
+.navbar .dropdown-item:hover,
+.navbar .dropdown-item:focus {
+    background: rgba(255, 255, 255, 0.08);
+}
+
+.navbar .form-control {
+    background: rgba(255, 255, 255, 0.12);
+    border: 1px solid rgba(255, 255, 255, 0.25);
+    color: var(--cream);
+    border-radius: 999px;
+    min-width: 170px;
+    max-width: 220px;
+}
+
+.navbar .form-control::placeholder {
+    color: rgba(255, 255, 255, 0.7);
+}
+
+.navbar .btn-outline-light {
+    color: var(--cream);
+    border-color: rgba(255, 255, 255, 0.35);
+}
+
+.navbar .btn-outline-light:hover {
+    background: rgba(255, 255, 255, 0.15);
+    border-color: rgba(255, 255, 255, 0.6);
+}
+
+.navbar .header-actions {
+    display: flex;
+    align-items: center;
+    gap: 0.75rem;
+}
+
+.btn-ghost-light {
+    color: rgba(246, 241, 228, 0.95);
+    border: 1px solid rgba(255, 255, 255, 0.24);
+    background: transparent;
+    padding: 0.45rem 0.9rem;
+    border-radius: 0.35rem;
+    transition: background 0.15s, border-color 0.15s;
+}
+
+.btn-ghost-light:hover {
+    background: rgba(255, 255, 255, 0.12);
 }
 
 .header-actions {

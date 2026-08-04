@@ -18,8 +18,8 @@ builder.Services.AddScoped<IBookingRule, EventNotInPastRule>();
 builder.Services.AddScoped<IBookingService, BookingService>();
 builder.Services.AddScoped<IBookingRepository, BookingRepository>();
 builder.Services.AddScoped<IEventRepository, EventRepository>();
+builder.Services.AddScoped<IVendorProfileRepository, VendorProfileRepository>();
 builder.Services.AddControllersWithViews();
-builder.Services.AddSingleton<IVendorCatalog, VendorCatalog>();
 
 var app = builder.Build();
 
@@ -32,11 +32,11 @@ if (!app.Environment.IsDevelopment())
 }
 
 app.UseHttpsRedirection();
+app.MapStaticAssets();
+app.UseStaticFiles();
 app.UseRouting();
 
 app.UseAuthorization();
-
-app.MapStaticAssets();
 
 app.MapControllerRoute(
     name: "default",
