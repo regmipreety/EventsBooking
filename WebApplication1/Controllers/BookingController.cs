@@ -7,14 +7,16 @@ public class BookingController : Controller
 {
    private readonly IBookingService _bookingService;
    private readonly IBookingRepository _bookingRepository;
+   private readonly IUserRepository _userRepository;
    private readonly ILogger<BookingController> _logger;
 
    private const string TempUserId= "temp-user-1";
 
-   public BookingController(IBookingService bookingService, IBookingRepository bookingRepository, ILogger<BookingController> logger)
+   public BookingController(IBookingService bookingService, IBookingRepository bookingRepository, IUserRepository userRepository, ILogger<BookingController> logger)
    {
        _bookingService = bookingService;
        _bookingRepository = bookingRepository;
+       _userRepository = userRepository;
        _logger = logger;
    }
 
@@ -22,6 +24,47 @@ public async Task<IActionResult> Index()
     {
         var bookings = await _bookingRepository.GetAllBookingsAsync();
         return View(bookings);
+    }
+
+    [HttpPost]
+    [ValidateAntiForgeryToken]
+    public Task<IActionResult> Create(int eventId, string email, string? userId = null)
+        => CreateBooking(eventId, email, userId);
+
+    private async Task<IActionResult> CreateBooking(int eventId, string email, string? userId = null)
+    {
+        if (string.IsNullOrWhiteSpace(email))
+        {
+            TempData["BookingError"] = "Email is required to create a booking.";
+            return RedirectToAction("Index", "Events");
+        }
+
+        var resolvedUserId = userId;
+        if (string.IsNullOrWhiteSpace(resolvedUserId))
+        {
+            var existingUser = await _userRepository.GetUserByEmailAsync(email);
+            if (existingUser != null)
+            {
+                resolvedUserId = existingUser.Id;
+            }
+        }
+
+        if (string.IsNullOrWhiteSpace(resolvedUserId))
+        {
+            TempData["BookingError"] = "No matching user was found for this email.";
+            return RedirectToAction("Index", "Events");
+        }
+
+        var result = await _bookingService.BookEventAsync(eventId, resolvedUserId);
+        if (!result.IsSuccess)
+        {
+            _logger.LogWarning("Failed to create booking for event {EventId} for user {UserId}: {ErrorMessage}", eventId, resolvedUserId, result.ErrorMessage);
+            TempData["BookingError"] = result.ErrorMessage;
+            return RedirectToAction("Index", "Events");
+        }
+
+        TempData["BookingSuccess"] = "Booking created successfully!";
+        return RedirectToAction("Index", "Events");
     }
 
     public async Task<IActionResult> MyBookings()
@@ -56,16 +99,19 @@ public async Task<IActionResult> Index()
    }
          
    [HttpPost]
+   [ValidateAntiForgeryToken]
     public async Task<IActionResult> CancelBooking(int bookingId)
     {
         var result = await _bookingService.CancelBookingAsync(bookingId, TempUserId);
         if(!result.IsSuccess)
         {
             _logger.LogWarning("Failed to cancel booking with ID {BookingId} by user {UserId}: {ErrorMessage}", bookingId, TempUserId, result.ErrorMessage);
-           
-        }   
-         TempData["BookingError"] = result.ErrorMessage;
+            TempData["BookingError"] = result.ErrorMessage;
             return RedirectToAction("MyBookings");
+        }
+
+        TempData["BookingSuccess"] = "Booking cancelled successfully!";
+        return RedirectToAction("MyBookings");
     }
 
     [HttpGet]

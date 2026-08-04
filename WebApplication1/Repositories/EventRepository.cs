@@ -17,6 +17,7 @@ public class EventRepository : IEventRepository
     {
         return await _context.Events
         .Include(e => e.Vendor)
+        .Include(e => e.Bookings)
         .OrderBy(e => e.StartDate)
         .ToListAsync();
     }

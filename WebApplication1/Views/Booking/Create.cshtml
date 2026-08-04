@@ -1,0 +1,37 @@
+@model WebApplication1.Models.Entities.User
+
+@{
+    ViewData["Title"] = "Create";
+}
+
+<h1>Create User</h1>
+
+<form asp-controller="User" asp-action="Create" method="post">
+    <input type="hidden" name="eventId" value="@Context.Request.Query["eventId"].ToString()" />
+    <div class="form-group">
+        <label asp-for="Name" class="control-label"></label>
+        <input asp-for="Name" class="form-control" />
+        <span asp-validation-for="Name" class="text-danger"></span>
+    </div>
+    <div class="form-group">
+        <label asp-for="Email" class="control-label"></label>
+        <input asp-for="Email" class="form-control" />
+        <span asp-validation-for="Email" class="text-danger"></span>
+    </div>
+    <div class="form-group">
+        <label asp-for="Phonenumber" class="control-label"></label>
+        <input asp-for="Phonenumber" class="form-control" />
+        <span asp-validation-for="Phonenumber" class="text-danger"></span>
+    </div>
+    <div class="form-group">
+        <input type="submit" value="Create" class="btn btn-primary" />
+    </div>
+</form>
+
+<div>
+    <a asp-action="Index">Back to List</a>
+</div>
+
+@section Scripts {
+    @{await Html.RenderPartialAsync("_ValidationScriptsPartial");}
+}

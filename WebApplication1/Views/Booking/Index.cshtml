@@ -36,7 +36,10 @@ else
                     <td>
                         <a asp-action="Details" asp-route-id="@booking.Id" class="btn btn-sm btn-secondary">Details</a>
                         <a asp-action="Edit" asp-route-id="@booking.Id" class="btn btn-sm btn-warning">Edit</a>
-                        <a asp-action="CancelBooking" asp-route-id="@booking.Id" class="btn btn-sm btn-danger">Cancel</a>
+                        <form asp-action="CancelBooking" method="post" class="d-inline">
+                            <input type="hidden" name="bookingId" value="@booking.Id" />
+                            <button type="submit" class="btn btn-sm btn-danger">Cancel</button>
+                        </form>
                     </td>
                 </tr>
             }

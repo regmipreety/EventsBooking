@@ -84,7 +84,8 @@ else
 
                         <!-- Price -->
                         <p class="fw-semibold" style="font-size: 14px;">from £@evt.Price.ToString("0.00") / person</p>
-
+                        <!-- Vendor -->
+                        <p class="text-muted mb-2" style="font-size: 14px;">Hosted by <strong>@evt.Vendor?.FullName</strong></p>
                         <!-- Date -->
                         <p class="text-muted small mb-3">@evt.StartDate.ToString("MMM dd, yyyy")</p>
                     </div>

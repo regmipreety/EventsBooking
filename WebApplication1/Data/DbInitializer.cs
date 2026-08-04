@@ -17,8 +17,8 @@ public static class DbInitializer
          {
              var users = new List<User>
              {
-                 new User { Id = "temp-user-1", Name = "Temporary User", Email = "tempuser@example.com", Password = "" },
-                 new User { Id = "temp-user-2", Name = "Temporary User 2", Email = "sun@gmail.com", Password = "123456" } 
+                 new User { Id = "1", Name = "Temporary User", Email = "tempuser@example.com", Phonenumber = "" },
+                 new User { Id = "2", Name = "Temporary User 2", Email = "sun@gmail.com", Phonenumber = "123-456-7890" } 
              };
 
              context.Users.AddRange(users);
