@@ -1,4 +1,77 @@
 @model WebApplication1.Models.Entities.VendorProfile
 
-<h1>Create Vendor Profile</h1>
+@{
+    ViewData["Title"] = "Add Vendor Profile";
+}
+
+<h1>Add Vendor Profile</h1>
+
+<form asp-controller="VendorProfiles" asp-action="Create" method="post">
+    @Html.AntiForgeryToken()
+    <div class="form-group mb-3">
+        <label asp-for="FirstName" class="control-label"></label>
+        <input asp-for="FirstName" class="form-control" />
+        <span asp-validation-for="FirstName" class="text-danger"></span>
+    </div>
+    <div class="form-group mb-3">
+        <label asp-for="LastName" class="control-label"></label>
+        <input asp-for="LastName" class="form-control" />
+        <span asp-validation-for="LastName" class="text-danger"></span>
+    </div>
+    <div class="form-group mb-3">
+        <label asp-for="EmailAddress" class="control-label"></label>
+        <input asp-for="EmailAddress" class="form-control" />
+        <span asp-validation-for="EmailAddress" class="text-danger"></span>
+    </div>
+      <div class="form-group mb-3">
+        <label asp-for="PhoneNumber" class="control-label"></label>
+        <input asp-for="PhoneNumber" class="form-control" />
+        <span asp-validation-for="PhoneNumber" class="text-danger"></span>
+    </div>
+      <div class="form-group mb-3">
+        <label asp-for="Category" class="control-label"></label>
+        <select asp-for="Category" class="form-control" id="CategorySelect">
+            <option value="">Select category</option>
+            <option value="Catering">Catering</option>
+            <option value="Food Festival">Food Festival</option>
+            <option value="Make-up">Make-up</option>
+            <option value="Other">Other</option>
+        </select>
+    </div>
+    <div class="form-group mb-3 d-none" id="CustomCategoryContainer">
+        <label for="CustomCategory" class="control-label">Custom Category</label>
+        <input type="text" id="CustomCategory" class="form-control" placeholder="Enter custom category" />
+    </div>
+       <div class="form-group mb-3">
+        <label asp-for="Location" class="control-label"></label>
+        <input asp-for="Location" class="form-control" />
+        <span asp-validation-for="Location" class="text-danger"></span>
+    </div>
+        <div class="form-group mb-3">
+        <label asp-for="Rating" class="control-label"></label>
+        <input asp-for="Rating" type="range" class="form-range" min="1" max="5" step="1" />
+        <span asp-validation-for="Rating" class="text-danger"></span>
+    </div>
+     <div class="form-group mb-3">
+        <label asp-for="Description" class="control-label"></label>
+        <input asp-for="Description" class="form-control" />
+        <span asp-validation-for="Description" class="text-danger"></span>
+    </div>
+     <div class="form-group form-check mb-5">
+        <input asp-for="IsVerified" type="checkbox" class="form-check-input" />
+        <label asp-for="IsVerified" class="form-check-label"></label>
+        <span asp-validation-for="IsVerified" class="text-danger"></span>
+    </div>
+    <div class="form-group">
+        <input type="submit" value="Create" class="btn btn-primary" />
+    </div>
+</form>
+
+<div>
+    <a asp-action="Index">Back to List</a>
+</div>
+
+@section Scripts {
+    @{await Html.RenderPartialAsync("_ValidationScriptsPartial");}
+}
 

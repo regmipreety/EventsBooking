@@ -140,10 +140,7 @@
                         <div class="vendor-meta">@evt.Location · @evt.StartDate.ToString("MMM dd, yyyy h:mm tt")</div>
                         <div class="vendor-meta">$@evt.Price · Capacity: @evt.Capacity</div>
                         <div class="vendor-foot">
-                            <form asp-controller="Booking" asp-action="BookEvent" method="post" class="d-inline">
-                                <input type="hidden" name="eventId" value="@evt.Id" />
-                                <button type="submit" class="btn btn-primary btn-sm">Book</button>
-                            </form>
+                            <a asp-controller="Booking" asp-action="Create" asp-route-eventId="@evt.Id" class="btn btn-primary btn-sm">Book</a>
                             <a asp-controller="Events" asp-action="Details" asp-route-id="@evt.Id" class="btn btn-secondary btn-sm">Details</a>
                         </div>
                     </div>

@@ -7,7 +7,7 @@
 
 <dl class="row">
     <dt class="col-sm-3">Description</dt>
-    <dd class="col-sm-9">@Model.Description</dd>
+    <dd class="col-sm-9">@Model.Description.StripHtml()</dd>
 
     <dt class="col-sm-3">Start</dt>
     <dd class="col-sm-9">@Model.StartDate.ToString("MMM dd, yyyy h:mm tt")</dd>

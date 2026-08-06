@@ -17,7 +17,10 @@ public class BookingRepository : IBookingRepository
         return await _context.Bookings.Include(b => b.Event).ToListAsync();
     }
     public async Task<Booking?> GetByIdAsync(int id)
-        => await _context.Bookings.Include(b=>b.Event).FirstOrDefaultAsync(b=>b.Id==id);
+        => await _context.Bookings
+            .Include(b => b.Event)
+            .Include(b => b.User)
+            .FirstOrDefaultAsync(b => b.Id == id);
     
     public async Task<List<Booking>> GetBookingsByEventIdAsync(int eventId)
     {
@@ -28,8 +31,17 @@ public class BookingRepository : IBookingRepository
 
     public async Task<List<Booking>> GetBookingsByUserIdAsync(string userId)
     {
-        return await _context.Bookings.Include(b => b.Event)
+        return await _context.Bookings
+            .Include(b => b.Event)
+            .Include(b => b.User)
             .Where(b => b.UserId == userId)
+            .ToListAsync();
+    } 
+
+     public async Task<List<Booking>> GetBookingsByUserEmailAsync(string userEmail)
+    {
+        return await _context.Bookings.Include(b => b.User)
+            .Where(b => b.User != null && b.User.Email == userEmail)
             .ToListAsync();
     } 
 

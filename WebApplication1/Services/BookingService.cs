@@ -66,5 +66,10 @@ public class BookingService: IBookingService
 
         return BookingResult.Success(bookingId);
     }
+
+    public async Task<List<Booking>> GetBookingsByUserEmailAsync(string userEmail)
+    {
+        return await _bookingRepository.GetBookingsByUserEmailAsync(userEmail);
+    }
     
 }

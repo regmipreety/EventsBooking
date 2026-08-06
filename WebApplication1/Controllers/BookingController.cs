@@ -1,6 +1,8 @@
 using Microsoft.AspNetCore.Mvc;
+using System.Text.Json;
 using WebApplication1.Services.Interfaces;
 using WebApplication1.Models.Enums;
+using WebApplication1.Models;
 namespace WebApplication1.Controllers;
 
 public class BookingController : Controller
@@ -10,14 +12,15 @@ public class BookingController : Controller
    private readonly IUserRepository _userRepository;
    private readonly ILogger<BookingController> _logger;
 
-   private const string TempUserId= "temp-user-1";
+   private readonly IUserService _userService;
 
-   public BookingController(IBookingService bookingService, IBookingRepository bookingRepository, IUserRepository userRepository, ILogger<BookingController> logger)
+   public BookingController(IBookingService bookingService, IBookingRepository bookingRepository, IUserRepository userRepository, ILogger<BookingController> logger, IUserService userService)
    {
        _bookingService = bookingService;
        _bookingRepository = bookingRepository;
        _userRepository = userRepository;
        _logger = logger;
+       _userService = userService;
    }
 
 public async Task<IActionResult> Index()
@@ -26,50 +29,50 @@ public async Task<IActionResult> Index()
         return View(bookings);
     }
 
-    [HttpPost]
-    [ValidateAntiForgeryToken]
-    public Task<IActionResult> Create(int eventId, string email, string? userId = null)
-        => CreateBooking(eventId, email, userId);
-
-    private async Task<IActionResult> CreateBooking(int eventId, string email, string? userId = null)
+    [HttpGet]
+    public IActionResult Create(int eventId)
     {
-        if (string.IsNullOrWhiteSpace(email))
+        var model = new BookingFormModel
         {
-            TempData["BookingError"] = "Email is required to create a booking.";
-            return RedirectToAction("Index", "Events");
-        }
-
-        var resolvedUserId = userId;
-        if (string.IsNullOrWhiteSpace(resolvedUserId))
-        {
-            var existingUser = await _userRepository.GetUserByEmailAsync(email);
-            if (existingUser != null)
-            {
-                resolvedUserId = existingUser.Id;
-            }
-        }
-
-        if (string.IsNullOrWhiteSpace(resolvedUserId))
-        {
-            TempData["BookingError"] = "No matching user was found for this email.";
-            return RedirectToAction("Index", "Events");
-        }
-
-        var result = await _bookingService.BookEventAsync(eventId, resolvedUserId);
-        if (!result.IsSuccess)
-        {
-            _logger.LogWarning("Failed to create booking for event {EventId} for user {UserId}: {ErrorMessage}", eventId, resolvedUserId, result.ErrorMessage);
-            TempData["BookingError"] = result.ErrorMessage;
-            return RedirectToAction("Index", "Events");
-        }
-
-        TempData["BookingSuccess"] = "Booking created successfully!";
-        return RedirectToAction("Index", "Events");
+            EventId = eventId
+        };
+        return View(model);
     }
 
-    public async Task<IActionResult> MyBookings()
+    [HttpPost]
+    [ValidateAntiForgeryToken]
+    public async Task<IActionResult> Create(BookingFormModel model)
     {
-        var bookings = await _bookingRepository.GetBookingsByUserIdAsync(TempUserId);
+        if(string.IsNullOrEmpty(model.Email) || string.IsNullOrEmpty(model.Username))
+        {
+            ModelState.AddModelError(string.Empty, "Email and Username are required.");
+            return RedirectToAction("Index", "Events");
+        }
+
+        try{
+            var user = await _userService.GetOrCreateUserAsync(model.Username, model.Email, model.PhoneNumber);
+            var result = await _bookingService.BookEventAsync(model.EventId, user.Id);
+
+            if (!result.IsSuccess)
+            {
+                ModelState.AddModelError(string.Empty, result.ErrorMessage);
+                return RedirectToAction("Index", "Events");
+            }
+
+            TempData["BookingSuccess"] = "Booking successful!";
+            return RedirectToAction("Index", "Events");
+        }
+        catch(Exception ex)
+        {
+            _logger.LogError(ex, "An error occurred while creating a booking for event {EventId} by user {Email}", model.EventId, model.Email);
+            ModelState.AddModelError(string.Empty, "An unexpected error occurred. Please try again later.");
+            return RedirectToAction("Index", "Events");
+        }
+    }
+
+    public async Task<IActionResult> MyBookings(string userId)
+    {
+        var bookings = await _bookingRepository.GetBookingsByUserIdAsync(userId);
         return View(bookings);
     }
 
@@ -84,28 +87,29 @@ public async Task<IActionResult> Index()
     }
 
    [HttpPost]
-   public async Task<IActionResult> BookEvent(int eventId)
+   public async Task<IActionResult> BookEvent(int eventId, string userId)
    {
-       var result = await _bookingService.BookEventAsync(eventId, TempUserId);
+
+       var result = await _bookingService.BookEventAsync(eventId, userId);
        if (!result.IsSuccess)
        {
-           _logger.LogWarning("Failed to book event with ID {EventId} by user {UserId}: {ErrorMessage}", eventId, TempUserId, result.ErrorMessage);
+           _logger.LogWarning("Failed to book event with ID {EventId} by user {UserId}: {ErrorMessage}", eventId, userId, result.ErrorMessage);
            TempData["BookingError"] = result.ErrorMessage;
            return RedirectToAction("Index", "Events");
        }
-        _logger.LogInformation("Successfully booked event with ID {EventId} by user {UserId}", eventId, TempUserId);
+        _logger.LogInformation("Successfully booked event with ID {EventId} by user {UserId}", eventId, userId);
        TempData["BookingSuccess"] = "Booking successful!";
        return RedirectToAction("Index", "Events");
    }
          
    [HttpPost]
    [ValidateAntiForgeryToken]
-    public async Task<IActionResult> CancelBooking(int bookingId)
+    public async Task<IActionResult> CancelBooking(int bookingId, string userId)
     {
-        var result = await _bookingService.CancelBookingAsync(bookingId, TempUserId);
+        var result = await _bookingService.CancelBookingAsync(bookingId, userId);
         if(!result.IsSuccess)
         {
-            _logger.LogWarning("Failed to cancel booking with ID {BookingId} by user {UserId}: {ErrorMessage}", bookingId, TempUserId, result.ErrorMessage);
+            _logger.LogWarning("Failed to cancel booking with ID {BookingId} by user {UserId}: {ErrorMessage}", bookingId, userId, result.ErrorMessage);
             TempData["BookingError"] = result.ErrorMessage;
             return RedirectToAction("MyBookings");
         }
@@ -141,5 +145,21 @@ public async Task<IActionResult> Index()
         TempData["BookingSuccess"] = "Booking updated successfully!";
         return RedirectToAction("MyBookings");
     }
+    [HttpGet]
+    public IActionResult SearchByEmail()
+    {
+        return View();
+    }
 
+    [HttpPost]
+    public async Task<IActionResult> GetBookingByEmail(string userEmail)
+    {
+        var bookings = await _bookingRepository.GetBookingsByUserEmailAsync(userEmail);
+
+        return RedirectToAction("MyBookings", new { userId = bookings.FirstOrDefault()?.UserId });
+    }
 }
+        
+     
+    
+

@@ -1,4 +1,5 @@
 using Microsoft.AspNetCore.Mvc;
+using WebApplication1.Models.Entities;
 using WebApplication1.Services.Interfaces;
 
 namespace WebApplication1.Controllers;
@@ -34,5 +35,17 @@ public class VendorProfilesController : Controller
     public IActionResult Create()
     {
         return View();
+    }
+
+    [HttpPost]
+    public async Task<IActionResult> Create(VendorProfile vendorProfile)
+    {
+        if (!ModelState.IsValid)
+        {
+            return View(vendorProfile);
+        }
+
+        await _vendorProfileRepository.AddVendorProfileAsync(vendorProfile);
+        return RedirectToAction(nameof(Index));
     }
 }

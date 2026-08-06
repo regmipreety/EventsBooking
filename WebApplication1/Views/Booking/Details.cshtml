@@ -5,7 +5,7 @@
         <div class="col-lg-8">
             <p class="text-uppercase text-muted mb-2 small">Booking details</p>
             <h1 class="mb-3">@Model.Event?.Name</h1>
-            <p class="text-muted fs-5">@(!string.IsNullOrWhiteSpace(Model.Event?.Description) ? Model.Event.Description : "A premium event experience with every detail handled for you.")</p>
+            <p class="text-muted fs-5">@(!string.IsNullOrWhiteSpace(Model.Event?.Description) ? Model.Event.Description.StripHtml() : "A premium event experience with every detail handled for you.")</p>
         </div>
         <div class="col-lg-4">
             <div class="card details-card shadow-sm border-0">
@@ -16,10 +16,10 @@
                         <dd class="col-7">@Model.Event?.Name</dd>
 
                         <dt class="col-5 text-muted">Event Description</dt>
-                        <dd class="col-7">@Model.Event?.Description</dd>
+                        <dd class="col-7">@Model.Event?.Description.StripHtml()</dd>
 
                         <dt class="col-5 text-muted">User</dt>
-                        <dd class="col-7">@Model.UserId</dd>
+                        <dd class="col-7">@Model.User?.Email</dd>
 
                         <dt class="col-5 text-muted">Booked at</dt>
                         <dd class="col-7">@Model.BookingDate.ToString("MMM dd, yyyy h:mm tt")</dd>
@@ -46,7 +46,7 @@
         <div class="col-lg-6">
             <section class="details-section p-4 rounded-4 shadow-sm bg-white">
                 <h2 class="mb-3">About service</h2>
-                <p class="text-muted">@(!string.IsNullOrWhiteSpace(Model.Event?.Vendor?.Description) ? Model.Event.Vendor.Description : "Enjoy a carefully designed event experience, delivered by an expert vendor with a reputation for professionalism and attention to detail.")</p>
+                <p class="text-muted">@(!string.IsNullOrWhiteSpace(Model.Event?.Vendor?.Description) ? Model.Event.Vendor.Description.StripHtml() : "Enjoy a carefully designed event experience, delivered by an expert vendor with a reputation for professionalism and attention to detail.")</p>
                 @if (Model.Event?.Vendor != null)
                 {
                     <div class="mt-3">

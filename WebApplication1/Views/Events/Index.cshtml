@@ -92,10 +92,7 @@ else
 
                     <div class="card-footer bg-white border-top pt-3">
                         <div class="d-grid gap-2">
-                            <form asp-controller="Booking" asp-action="BookEvent" method="post" class="d-inline">
-                                <input type="hidden" name="eventId" value="@evt.Id" />
-                                <button type="submit" class="btn btn-primary w-100 btn-sm mb-2">Book Now</button>
-                            </form>
+                            <a asp-controller="Booking" asp-action="Create" asp-route-eventId="@evt.Id" class="btn btn-primary w-100 btn-sm mb-2">Book Now</a>
                             <div class="d-flex gap-2">
                                 <a asp-action="Details" asp-route-id="@evt.Id" class="btn btn-outline-secondary btn-sm flex-grow-1">Details</a>
                                 <a asp-action="Edit" asp-route-id="@evt.Id" class="btn btn-outline-warning btn-sm flex-grow-1">Edit</a>

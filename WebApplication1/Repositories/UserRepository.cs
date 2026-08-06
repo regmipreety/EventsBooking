@@ -3,7 +3,7 @@ using WebApplication1.Data;
 using WebApplication1.Models.Entities;
 using WebApplication1.Services.Interfaces;
 
-namespace Webapplication1.Repositories;
+namespace WebApplication1.Repositories;
 
 public class UserRepository : IUserRepository
 {
