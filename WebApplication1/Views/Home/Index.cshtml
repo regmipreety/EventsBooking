@@ -1,4 +1,5 @@
-﻿@model WebApplication1.Models.HomeViewModel
+﻿@model List<WebApplication1.Models.Entities.Event>
+
 @{
     ViewData["Title"] = "TickEvent";
 }
@@ -117,8 +118,35 @@
             <h2>Featured this month</h2>
         </div>
         <div class="vendor-grid">
-            @foreach (var vendor in Model.Vendors)
+            @foreach (var evt in Model)
             {
+                <div class="vendor-card">
+                    @if (!string.IsNullOrEmpty(evt.ImagePath))
+                    {
+                        <div class="vendor-img" style="background-image: url('@evt.ImagePath'); background-size: cover; background-position: center;">
+                            <div class="verified-badge"><svg viewBox="0 0 24 24" fill="none" stroke="#12291F" stroke-width="3"><polyline points="20 6 9 17 4 12"></polyline></svg>Verified</div>
+                            <span class="vendor-cat">@evt.Name</span>
+                        </div>
+                    }
+                    else
+                    {
+                        <div class="vendor-img" style="background: linear-gradient(135deg, #667eea 0%, #764ba2 100%);">
+                            <div class="verified-badge"><svg viewBox="0 0 24 24" fill="none" stroke="#12291F" stroke-width="3"><polyline points="20 6 9 17 4 12"></polyline></svg>Verified</div>
+                            <span class="vendor-cat">@evt.Name</span>
+                        </div>
+                    }
+                    <div class="vendor-body">
+                        <h3>@evt.Name</h3>
+                        <div class="vendor-meta">@evt.Location · @evt.StartDate.ToString("MMM dd, yyyy h:mm tt")</div>
+                        <div class="vendor-meta">$@evt.Price · Capacity: @evt.Capacity</div>
+                        <div class="vendor-foot">
+                            <a asp-controller="Booking" asp-action="Create" asp-route-eventId="@evt.Id" class="btn btn-primary btn-sm">Book</a>
+                            <a asp-controller="Events" asp-action="Details" asp-route-id="@evt.Id" class="btn btn-secondary btn-sm">Details</a>
+                        </div>
+                    </div>
+                </div>
+            }
+            @* {
                 <div class="vendor-card">
                     <div class="vendor-img">
                         <div class="verified-badge"><svg viewBox="0 0 24 24" fill="none" stroke="#12291F" stroke-width="3"><polyline points="20 6 9 17 4 12"></polyline></svg>Verified</div>
@@ -128,14 +156,12 @@
                         <h3>@vendor.FullName</h3>
                         <div class="vendor-meta">@vendor.Location · @vendor.Description</div>
                         <div class="vendor-meta">@vendor.EmailAddress · @vendor.PhoneNumber</div>
-                        <div class="vendor-meta">Available from @vendor.Availability?.ToString("dd MMM yyyy")</div>
                         <div class="vendor-foot">
                             <div class="vendor-rating"><svg viewBox="0 0 24 24"><polygon points="12 2 15 9 22 9.5 17 14.5 18.5 22 12 18 5.5 22 7 14.5 2 9.5 9 9"></polygon></svg>@vendor.Rating.ToString("0.0")</div>
-                            <div class="vendor-price">from £@vendor.Price.ToString("N0")</div>
                         </div>
                     </div>
                 </div>
-            }
+            } *@
         </div>
     </div>
 </section>

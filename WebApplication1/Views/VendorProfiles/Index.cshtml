@@ -1,0 +1,26 @@
+@model IEnumerable<WebApplication1.Models.Entities.VendorProfile>
+
+<h1>Vendor Profiles</h1>
+
+@if (Model == null || !Model.Any())
+{
+    <p>No vendor profiles found.</p>
+}
+else
+{
+    foreach (var profile in Model)
+    {
+        <div class="card mb-3">
+            <div class="card-body">
+                <h5 class="card-title">@profile.FullName</h5>
+                <p class="card-text"><strong>Email:</strong> @profile.EmailAddress</p>
+                <p class="card-text"><strong>Phone Number:</strong> @profile.PhoneNumber</p>
+                <p class="card-text"><strong>Rating:</strong> @profile.Rating</p>
+                <p class="card-text"><strong>Location:</strong> @profile.Location</p>
+                <p class="card-text"><strong>Description:</strong> @profile.Description</p>
+
+                <a asp-action="Edit" asp-route-id="@profile.Id" class="btn btn-primary">Edit Profile</a>
+            </div>
+        </div>
+    }
+}

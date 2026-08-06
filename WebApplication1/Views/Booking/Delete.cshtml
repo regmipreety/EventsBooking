@@ -1,0 +1,22 @@
+@model WebApplication1.Models.Entities.Booking
+
+<h1>Delete Booking?</h1>
+
+<p>Are you sure you want to permanently delete this booking?</p>
+
+<dl class="row">
+    <dt class="col-sm-3">Event</dt>
+    <dd class="col-sm-9">@Model.Event?.Name</dd>
+
+    <dt class="col-sm-3">User</dt>
+    <dd class="col-sm-9">@Model.UserId</dd>
+
+    <dt class="col-sm-3">Status</dt>
+    <dd class="col-sm-9">@Model.Status</dd>
+</dl>
+
+<form asp-action="Delete" method="post">
+    <input type="hidden" name="id" value="@Model.Id" />
+    <button type="submit" class="btn btn-danger">Yes, delete permanently</button>
+    <a asp-action="Index" class="btn btn-secondary">Cancel</a>
+</form>

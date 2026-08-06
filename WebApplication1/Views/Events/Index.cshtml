@@ -1,0 +1,107 @@
+@model List<WebApplication1.Models.Entities.Event>
+
+@if (TempData["EventSuccess"] != null)
+{
+    <div class="alert alert-success">@TempData["EventSuccess"]</div>
+}
+@if(TempData["EventError"] != null)
+{
+    <div class="alert alert-danger">@TempData["EventError"]</div>
+}
+@if (TempData["BookingSuccess"] != null)
+{
+    <div class="alert alert-success">@TempData["BookingSuccess"]</div>
+}
+@if (TempData["BookingError"] != null)
+{
+    <div class="alert alert-danger">@TempData["BookingError"]</div>
+}
+
+<div class="mb-5">
+    <h1 class="display-5 fw-bold mb-2">Some of our favourite party experiences</h1>
+    <p class="lead text-muted">Looking for something special? Explore our expert picks for parties that go above & beyond.</p>
+</div>
+
+<div class="d-flex justify-content-between align-items-center mb-4">
+    <a asp-action="Create" class="btn btn-primary">+ Create Event</a>
+</div>
+
+@if (!Model.Any())
+{
+    <p class="text-muted">No events available yet.</p>
+}
+else
+{
+    <div class="row g-4">
+        @foreach (var evt in Model)
+        {
+            <div class="col-lg-3 col-md-6">
+                <div class="card h-100 shadow-sm position-relative overflow-hidden" style="border: none; border-radius: 12px;">
+                    <!-- Badge -->
+                    @if (evt.Vendor?.Rating >= 4.8m)
+                    {
+                        <div class="position-absolute top-0 start-0 p-3" style="z-index: 10;">
+                            <span class="badge" style="background-color: #e91e63; padding: 8px 12px; font-size: 11px; font-weight: 700;">
+                                ★ EXTRAORDINARY
+                            </span>
+                        </div>
+                    }
+                    else if (evt.Vendor?.IsVerified ?? false)
+                    {
+                        <div class="position-absolute top-0 start-0 p-3" style="z-index: 10;">
+                            <span class="badge" style="background-color: #e91e63; padding: 8px 12px; font-size: 11px; font-weight: 700;">
+                                ✓ POPTOP CHOICE
+                            </span>
+                        </div>
+                    }
+
+                    <!-- Image -->
+                    @if (!string.IsNullOrEmpty(evt.ImagePath))
+                    {
+                        <img src="@evt.ImagePath" class="card-img-top" alt="@evt.Name" style="height: 220px; object-fit: cover;" />
+                    }
+                    else
+                    {
+                        <div style="height: 220px; background: linear-gradient(135deg, #667eea 0%, #764ba2 100%); display: flex; align-items: center; justify-content: center; color: white;">
+                            <span>@evt.Name.Substring(0, 1)</span>
+                        </div>
+                    }
+
+                    <div class="card-body pb-2">
+                        <!-- Rating and Stats -->
+                        <div class="d-flex align-items-center mb-2">
+                            <span class="text-danger me-2" style="font-size: 16px;">★</span>
+                            <strong>@(evt.Vendor?.Rating ?? 4.8m)</strong>
+                            <span class="text-muted ms-1" style="font-size: 14px;">(@(evt.Bookings?.Count ?? 0) reviews)</span>
+                            <span class="text-muted ms-1" style="font-size: 14px;">· @(evt.Bookings?.Count ?? 0) bookings</span>
+                        </div>
+
+                        <!-- Event Name -->
+                        <h5 class="card-title fw-bold mb-2">@evt.Name</h5>
+
+                        <!-- Location -->
+                        <p class="text-muted mb-2" style="font-size: 14px;">📍 @evt.Location</p>
+
+                        <!-- Price -->
+                        <p class="fw-semibold" style="font-size: 14px;">from £@evt.Price.ToString("0.00") / person</p>
+                        <!-- Vendor -->
+                        <p class="text-muted mb-2" style="font-size: 14px;">Hosted by <strong>@evt.Vendor?.FullName</strong></p>
+                        <!-- Date -->
+                        <p class="text-muted small mb-3">@evt.StartDate.ToString("MMM dd, yyyy")</p>
+                    </div>
+
+                    <div class="card-footer bg-white border-top pt-3">
+                        <div class="d-grid gap-2">
+                            <a asp-controller="Booking" asp-action="Create" asp-route-eventId="@evt.Id" class="btn btn-primary w-100 btn-sm mb-2">Book Now</a>
+                            <div class="d-flex gap-2">
+                                <a asp-action="Details" asp-route-id="@evt.Id" class="btn btn-outline-secondary btn-sm flex-grow-1">Details</a>
+                                <a asp-action="Edit" asp-route-id="@evt.Id" class="btn btn-outline-warning btn-sm flex-grow-1">Edit</a>
+                                <a asp-action="Delete" asp-route-id="@evt.Id" class="btn btn-outline-danger btn-sm flex-grow-1">Delete</a>
+                            </div>
+                        </div>
+                    </div>
+                </div>
+            </div>
+        }
+    </div>
+}

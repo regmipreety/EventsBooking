@@ -1,0 +1,28 @@
+@model WebApplication1.Models.Entities.Event
+<h1>@Model.Name</h1>
+@if (!string.IsNullOrEmpty(Model.ImagePath))
+{
+    <img src="@Model.ImagePath" alt="@Model.Name" style="max-width: 400px;" class="mb-3" />
+}
+
+<dl class="row">
+    <dt class="col-sm-3">Description</dt>
+    <dd class="col-sm-9">@Model.Description.StripHtml()</dd>
+
+    <dt class="col-sm-3">Start</dt>
+    <dd class="col-sm-9">@Model.StartDate.ToString("MMM dd, yyyy h:mm tt")</dd>
+
+    <dt class="col-sm-3">End</dt>
+    <dd class="col-sm-9">@Model.EndDate.ToString("MMM dd, yyyy h:mm tt")</dd>
+
+    <dt class="col-sm-3">Location</dt>
+    <dd class="col-sm-9">@Model.Location</dd>
+
+    <dt class="col-sm-3">Price</dt>
+    <dd class="col-sm-9">$@Model.Price</dd>
+
+    <dt class="col-sm-3">Capacity</dt>
+    <dd class="col-sm-9">@Model.Capacity</dd>
+</dl>
+
+<a asp-action="Index" class="btn btn-secondary">Back to Events</a>

@@ -1,3 +1,4 @@
+using WebApplication1.Models.Entities;
 namespace WebApplication1.Models;
 
 public class AdminViewModel
