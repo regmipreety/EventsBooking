@@ -1,5 +1,4 @@
 using Microsoft.AspNetCore.Mvc;
-using System.Text.Json;
 using WebApplication1.Services.Interfaces;
 using WebApplication1.Models.Enums;
 using WebApplication1.Models;
@@ -10,15 +9,17 @@ public class BookingController : Controller
    private readonly IBookingService _bookingService;
    private readonly IBookingRepository _bookingRepository;
    private readonly IUserRepository _userRepository;
+   private readonly IEventRepository _eventRepository;
    private readonly ILogger<BookingController> _logger;
 
    private readonly IUserService _userService;
 
-   public BookingController(IBookingService bookingService, IBookingRepository bookingRepository, IUserRepository userRepository, ILogger<BookingController> logger, IUserService userService)
+   public BookingController(IBookingService bookingService, IBookingRepository bookingRepository, IUserRepository userRepository, IEventRepository eventRepository, ILogger<BookingController> logger, IUserService userService)
    {
        _bookingService = bookingService;
        _bookingRepository = bookingRepository;
        _userRepository = userRepository;
+       _eventRepository = eventRepository;
        _logger = logger;
        _userService = userService;
    }
@@ -30,8 +31,27 @@ public async Task<IActionResult> Index()
     }
 
     [HttpGet]
-    public IActionResult Create(int eventId)
+    public async Task<IActionResult> Create(int eventId)
     {
+        var evt = await _eventRepository.GetEventByIdAsync(eventId);
+        if(evt == null)
+        {
+            TempData["BookingError"] = "Event not found.";
+            return RedirectToAction("Index", "Home");
+
+        }
+        if(evt.StartDate < DateTime.UtcNow)
+        {
+            TempData["BookingError"] = "Cannot book past events.";
+            return RedirectToAction("Index", "Home");
+        }
+        var existingBookings = await _bookingRepository.GetBookingsByEventIdAsync(eventId);
+        var confirmedBookingsCount = existingBookings.Count(b => b.Status == BookingStatus.Confirmed);
+        if(confirmedBookingsCount >= evt.Capacity)
+        {
+            TempData["BookingError"] = "Event is fully booked.";
+            return RedirectToAction("Index", "Home");
+        }
         var model = new BookingFormModel
         {
             EventId = eventId
