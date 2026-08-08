@@ -1,5 +1,10 @@
 ﻿@model List<WebApplication1.Models.Entities.Event>
 
+@if (TempData["BookingError"] != null)
+{
+    <div class="alert alert-danger">@TempData["BookingError"]</div>
+}
+
 @{
     ViewData["Title"] = "TickEvent";
 }

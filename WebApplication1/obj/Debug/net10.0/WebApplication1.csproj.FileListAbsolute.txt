@@ -212,5 +212,5 @@
 /Users/preetyregmi/EventsBooking/WebApplication1/obj/Debug/net10.0/WebApplication1.csproj.AssemblyReference.cache
 /Users/preetyregmi/EventsBooking/WebApplication1/obj/Debug/net10.0/WebAppli.7D14BD69.Up2Date
 /Users/preetyregmi/EventsBooking/WebApplication1/obj/Debug/net10.0/compressed/556miamfr6-{0}-ba0wi8ns6m-ba0wi8ns6m.gz
-/Users/preetyregmi/EventsBooking/WebApplication1/obj/Debug/net10.0/compressed/wjlgayfcgf-{0}-3htfft3zot-3htfft3zot.gz
 /Users/preetyregmi/EventsBooking/WebApplication1/obj/Debug/net10.0/compressed/w3u7ibosd4-{0}-j7zaznaphb-j7zaznaphb.gz
+/Users/preetyregmi/EventsBooking/WebApplication1/obj/Debug/net10.0/compressed/wjlgayfcgf-{0}-wb7a63zcrg-wb7a63zcrg.gz
